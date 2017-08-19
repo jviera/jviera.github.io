@@ -14,7 +14,7 @@ baseurl: '/jviera.github.io' #change it according to your repository name
 
 #Profile information
 name: José Viera
-tagline: Programador Java
+tagline: Desarrollador de Software
 pic: profile.png  #place a 100x100 picture inside /assets/images/ folder and provide the name of the file below
 
 #sidebar links
