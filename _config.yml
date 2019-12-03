@@ -14,11 +14,11 @@ baseurl: '/jviera.github.io' #change it according to your repository name
 
 #Profile information
 name: José Viera
-tagline: Desarrollador de Software
+tagline: Ingeniero de Software
 pic: profile.png  #place a 100x100 picture inside /assets/images/ folder and provide the name of the file below
 
 #sidebar links
-email: jviera.dev@gmail.com
+email: jb.viera@gmail.com
 phone: XXX XXX XX XX
 website: jviera.github.io #do not add http://
 linkedin: josé-barbarito-viera-rebolledo-905b0850
