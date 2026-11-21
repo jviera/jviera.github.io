@@ -1,0 +1,86 @@
+---
+import { SITE } from '../config';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const giscusConfig = SITE.giscus;
+const isConfigured = Boolean(giscusConfig.repoId && giscusConfig.categoryId);
+---
+
+<section class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700" id="comments-section">
+  <h3 class="text-xl font-bold mb-6 text-gray-900 dark:text-gray-100 flex items-center gap-2">
+    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+    </svg>
+    {t('blog.comments')}
+  </h3>
+
+  {isConfigured ? (
+    <div id="giscus-container" class="min-h-[200px]"></div>
+  ) : (
+    <div class="p-5 rounded-xl border border-blue-200 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-950/20 text-sm">
+      <div class="font-semibold text-blue-900 dark:text-blue-300 mb-2 flex items-center gap-2">
+        <span>💬</span> {lang === 'es' ? 'Sección de comentarios lista' : 'Comments section ready'}
+      </div>
+      <p class="text-gray-700 dark:text-gray-300 mb-3">
+        {lang === 'es' 
+          ? `Para conectar los comentarios impulsados por GitHub Discussions a tu repositorio (${giscusConfig.repo}):`
+          : `To connect GitHub Discussions comments to your repository (${giscusConfig.repo}):`}
+      </p>
+      <ol class="list-decimal list-inside space-y-1 text-gray-600 dark:text-gray-400">
+        <li>{lang === 'es' ? 'Habilita "Discussions" en la pestaña Settings de tu repositorio GitHub.' : 'Enable "Discussions" in the Settings tab of your GitHub repo.'}</li>
+        <li>{lang === 'es' ? 'Visita ' : 'Visit '}<a href="https://giscus.app" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 underline font-medium">giscus.app</a>{lang === 'es' ? ' y autoriza tu repo para obtener repoId y categoryId.' : ' and authorize your repo to obtain your repoId and categoryId.'}</li>
+        <li>{lang === 'es' ? 'Pega los IDs en ' : 'Paste both IDs into '}<code class="text-xs bg-gray-200 dark:bg-gray-800 px-1 py-0.5 rounded">src/config.ts</code>.</li>
+      </ol>
+    </div>
+  )}
+</section>
+
+{isConfigured && (
+  <script is:inline define:vars={{ giscusConfig, lang }}>
+    function loadGiscus() {
+      const container = document.getElementById('giscus-container');
+      if (!container) return;
+
+      const isDark = document.documentElement.classList.contains('dark');
+      const theme = isDark ? 'dark' : 'light';
+
+      const script = document.createElement('script');
+      script.src = 'https://giscus.app/client.js';
+      script.setAttribute('data-repo', giscusConfig.repo);
+      script.setAttribute('data-repo-id', giscusConfig.repoId);
+      script.setAttribute('data-category', giscusConfig.category);
+      script.setAttribute('data-category-id', giscusConfig.categoryId);
+      script.setAttribute('data-mapping', giscusConfig.mapping);
+      script.setAttribute('data-strict', '0');
+      script.setAttribute('data-reactions-enabled', giscusConfig.reactionsEnabled);
+      script.setAttribute('data-emit-metadata', giscusConfig.emitMetadata);
+      script.setAttribute('data-input-position', giscusConfig.inputPosition);
+      script.setAttribute('data-theme', theme);
+      script.setAttribute('data-lang', lang);
+      script.crossOrigin = 'anonymous';
+      script.async = true;
+
+      container.innerHTML = '';
+      container.appendChild(script);
+    }
+
+    loadGiscus();
+
+    // Sincronizar tema de Giscus cuando el usuario cambia el tema
+    window.addEventListener('theme-change', (e) => {
+      const iframe = document.querySelector('iframe.giscus-frame');
+      if (!iframe) return;
+      const theme = e.detail.theme;
+      iframe.contentWindow?.postMessage(
+        { giscus: { setConfig: { theme: theme === 'dark' ? 'dark' : 'light' } } },
+        'https://giscus.app'
+      );
+    });
+  </script>
+)}

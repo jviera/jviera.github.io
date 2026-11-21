@@ -1,0 +1,47 @@
+---
+import { languages } from '../i18n/ui';
+
+interface Props {
+  currentLang: 'es' | 'en';
+}
+
+const { currentLang } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+function getAlternateUrl(targetLang: 'es' | 'en') {
+  if (targetLang === currentLang) return currentPath;
+
+  if (targetLang === 'en') {
+    // Pasar de ES a EN: añadir /en al inicio
+    return `/en${currentPath === '/' ? '' : currentPath}`;
+  } else {
+    // Pasar de EN a ES: remover /en del inicio
+    const stripped = currentPath.replace(/^\/en/, '');
+    return stripped === '' ? '/' : stripped;
+  }
+}
+---
+
+<div class="flex items-center space-x-1 text-xs font-medium border border-gray-200 dark:border-gray-700 rounded-lg p-1 bg-gray-50 dark:bg-gray-800">
+  <a
+    href={getAlternateUrl('es')}
+    class={`px-2 py-1 rounded transition-colors ${
+      currentLang === 'es'
+        ? 'bg-blue-600 text-white font-semibold'
+        : 'text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white'
+    }`}
+  >
+    ES
+  </a>
+  <span class="text-gray-300 dark:text-gray-600">|</span>
+  <a
+    href={getAlternateUrl('en')}
+    class={`px-2 py-1 rounded transition-colors ${
+      currentLang === 'en'
+        ? 'bg-blue-600 text-white font-semibold'
+        : 'text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white'
+    }`}
+  >
+    EN
+  </a>
+</div>

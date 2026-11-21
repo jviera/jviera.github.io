@@ -1,0 +1,60 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Comments from '../../components/Comments.astro';
+import { useTranslations } from '../../i18n/ui';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => data.lang === 'es');
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.(md|mdx)$/, '') },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const lang = 'es';
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description} lang={lang}>
+  <article>
+    <div class="mb-6">
+      <a href="/blog" class="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline">
+        {t('blog.back')}
+      </a>
+    </div>
+
+    <header class="mb-8 pb-6 border-b border-gray-200 dark:border-slate-800">
+      <div class="text-xs text-gray-500 mb-3 flex items-center gap-2">
+        <span>{t('blog.published_on')}</span>
+        <FormattedDate date={post.data.pubDate} lang={lang} />
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+        {post.data.title}
+      </h1>
+
+      <p class="text-base text-gray-600 dark:text-gray-300 italic">
+        {post.data.description}
+      </p>
+
+      <div class="flex flex-wrap gap-2 mt-4">
+        {post.data.tags.map((tag) => (
+          <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/50">
+            #{tag}
+          </span>
+        ))}
+      </div>
+    </header>
+
+    <div class="prose dark:prose-invert max-w-none text-gray-800 dark:text-gray-200">
+      <Content />
+    </div>
+
+    <!-- Sección de Comentarios con Giscus -->
+    <Comments lang={lang} />
+  </article>
+</BaseLayout>

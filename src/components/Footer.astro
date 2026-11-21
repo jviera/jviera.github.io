@@ -1,0 +1,30 @@
+---
+import { SITE } from '../config';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-16 border-t border-gray-200 dark:border-slate-800 py-8 text-center text-xs text-gray-500 dark:text-gray-400">
+  <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <p>
+      &copy; {year} <span class="font-medium text-gray-700 dark:text-gray-300">{SITE.author}</span>. {t('footer.rights')}
+    </p>
+    <p class="flex items-center gap-1.5">
+      <span>Built with</span>
+      <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="font-medium text-blue-600 dark:text-blue-400 hover:underline">
+        Astro
+      </a>
+      <span>&amp; hosted on</span>
+      <a href="https://pages.github.com" target="_blank" rel="noopener noreferrer" class="font-medium text-blue-600 dark:text-blue-400 hover:underline">
+        GitHub Pages
+      </a>
+    </p>
+  </div>
+</footer>
