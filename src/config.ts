@@ -21,16 +21,15 @@ export const SITE = {
     email: 'mailto:contact@jviera.dev',
   },
   // Configuración de comentarios con Giscus (GitHub Discussions)
-  // Para activarlo completamente, visita https://giscus.app con tu repositorio jviera/jviera.github.io
   giscus: {
     repo: 'jviera/jviera.github.io',
-    repoId: '', // Completar desde giscus.app (ej. 'R_kgDO...')
-    category: 'Announcements', // o 'General'
-    categoryId: '', // Completar desde giscus.app (ej. 'DIC_kwDO...')
+    repoId: 'R_kgDOV3EqSA',
+    category: 'Announcements',
+    categoryId: 'DIC_kwDOV3EqSM4DLrqP',
     mapping: 'pathname',
     reactionsEnabled: '1',
     emitMetadata: '0',
-    inputPosition: 'top',
+    inputPosition: 'bottom',
     theme: 'preferred_color_scheme',
     lang: 'es',
   },
