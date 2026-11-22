@@ -4,7 +4,7 @@ export const SITE = {
   title: 'José Viera | Ingeniero de Software',
   description: 'Portafolio, Blog, CV y pensamientos sobre ingeniería de software, arquitectura y bases de datos.',
   url: 'https://jviera.github.io',
-  avatar: '/avatar.svg',
+  avatar: '/avatar.jpg',
   role: {
     es: 'Ingeniero de Software | Especialista en Bases de Datos',
     en: 'Software Engineer | Database Specialist',
